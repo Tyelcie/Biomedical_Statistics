@@ -1,0 +1,315 @@
+rm(list=ls())
+install.packages('MatchIt')
+library(MatchIt)
+library(rJava)
+library(xlsxjars)
+library(xlsx)
+setwd('D:\\PSM')d
+
+# generate data 
+LABA.neg <- rep(0,292)
+LABA.pos <- rep(1,299)
+LABA <- c(LABA.neg,LABA.pos)
+
+Age.pos <- round(rnorm(299,66.4,5.3),0)
+Age.neg <- round(rnorm(292,66.9,5.2),0)
+Age <- c(Age.neg,Age.pos)
+
+Sex.pos <- c(rep(1,116),rep(0,299-116))
+sex.neg <- c(rep(1,93),rep(0,292-93))
+Sex <- c(sex.neg,Sex.pos)
+
+Race.pos <- c(rep(1,13),rep(0,299-13))
+Race.neg <- c(rep(1,20),rep(0,292-20))
+Race <- c(Race.neg,Race.pos)
+
+Annual.pos <- c(rep(1,149),rep(0,299-149))
+Annual.neg <- c(rep(1,155),rep(0,292-155))
+Annual.income <- c(Annual.neg,Annual.pos)
+
+FEV1.pre.pos <- round(rnorm(299,26.7,7.0),2)
+FEV1.pre.neg <- round(rnorm(292,26.8,7.1),2)
+FEV1.pre <- c(FEV1.pre.neg,FEV1.pre.pos)
+
+FEV1.pos <- round(rnorm(299,772,243),0)
+FEV1.neg <- round(rnorm(292,777,240),0)
+FEV1 <- c(FEV1.neg,FEV1.pos)
+
+FEV1.FVC.pos <- round(rnorm(299,31.5,6.6),2)
+FEV1.FVC.neg <- round(rnorm(292,30.9,6.0),2)
+FEV1.FVC <- c(FEV1.FVC.neg,FEV1.FVC.pos)
+
+FVC.pre.pos <- round(rnorm(299,66.5,14.9),0)
+FVC.pre.neg <- round(rnorm(292,68.0,15.3),0)
+FVC.pre <- c(FVC.pre.neg,FVC.pre.pos)
+
+FVC.pos <- round(rnorm(299,2509,791),0)
+FVC.neg <- round(rnorm(292,2582,772),0)
+FVC <- c(FVC.neg,FVC.pos)
+
+FRC.pos <- round(rnorm(299,5975,1298),0)
+FRC.neg <- round(rnorm(292,6111,1323),0)
+FRC <- c(FRC.neg,FRC.pos)
+
+DLCO.neg <- round(rnorm(292,8.1,3.0),2)
+DLCO.pos <- round(rnorm(299,8.0,3.1),2)
+DLCO <- c(DLCO.neg,DLCO.pos)
+
+PPAP.neg <- round(rnorm(292,34.2,6.1),0)
+PPAP.pos <- round(rnorm(299,33.3,6.3),0)
+PPAP <- c(PPAP.neg,PPAP.pos)
+
+Hb.neg <- round(rnorm(292,14.4,1.2),2)
+Hb.pos <- round(rnorm(299,14.3,1.3),2)
+Hb <- c(Hb.neg,Hb.pos)
+
+PaO2.neg <- round(rnorm(292,64.0,10.0),0)
+PaO2.pos <- round(rnorm(299,64.4,10.0),0)
+PaO2 <- c(PaO2.neg,PaO2.pos)
+
+PaCO2.neg <- round(rnorm(292,43.6,6.1),0)
+PaCO2.pos <- round(rnorm(299,42.6,5.4),0)
+PaCO2 <- c(PaCO2.neg,PaCO2.pos)
+
+Aoe.neg <- round(rnorm(292,15.7,11.1),2)
+Aoe.pos <- round(rnorm(299,16.4,10.2),2)
+Aoe <- c(Aoe.neg,Aoe.pos)
+
+BMI.neg <- round(rnorm(292,24.7,3.6),2)
+BMI.pos <- round(rnorm(299,24.8,3.5),2)
+BMI <- c(BMI.neg,BMI.pos)
+
+SWD.neg <- round(rnorm(292,366,95),2)
+SWD.pos <- round(rnorm(299,370,98),2)
+SWD <- c(SWD.neg,SWD.pos)
+
+Que.neg<- round(rnorm(292,54.1,12.6),0)
+Que.pos <- round(rnorm(299,53.1,12.7),0)
+Que <- c(Que.neg,Que.pos)
+
+SQue.neg<- round(rnorm(292,63.8,18.1),0)
+SQue.pos <- round(rnorm(299,62.7,18.9),0)
+SQue <- c(SQue.neg,SQue.pos)
+
+BDI.neg<- round(rnorm(292,9.2,5.8),0)
+BDI.pos <- round(rnorm(299,9.3,5.9),0)
+BDI <- c(BDI.neg,BDI.pos)
+
+REV.neg <- c(rep(1,38),rep(0,292-38))
+REV.pos <- c(rep(1,37),rep(0,299-37))
+REV <- c(REV.neg,REV.pos)
+
+RHS.neg <- c(rep(1,26),rep(0,292-26))
+RHS.pos <- c(rep(1,22),rep(0,299-22))
+RHS <- c(RHS.neg,RHS.pos)
+
+LTOTS.neg <- c(rep(1,206),rep(0,292-206))
+LTOTS.pos <- c(rep(1,208),rep(0,299-208))
+LTOTS <- c(LTOTS.neg,LTOTS.pos)
+
+LTOTE.neg <- c(rep(1,233),rep(0,292-233))
+LTOTE.pos <- c(rep(1,232),rep(0,299-232))
+LTOTE <- c(LTOTE.neg,LTOTE.pos)
+
+Corticoid.neg <- c(rep(1,76),rep(0,292-76))
+Corticoid.pos <- c(rep(1,77),rep(0,299-77))
+Corticoid <- c(Corticoid.neg,Corticoid.pos)
+
+InCor.neg <- c(rep(1,211),rep(0,292-211))
+InCor.pos <- c(rep(1,236),rep(0,299-236))
+InCor <- c(InCor.neg,InCor.pos)
+
+SABA.neg <- c(rep(1,264),rep(0,292-264))
+SABA.pos <- c(rep(1,251),rep(0,299-251))
+SABA <- c(SABA.neg,SABA.pos)
+
+ACA.neg <- c(rep(1,242),rep(0,292-242))
+ACA.pos <- c(rep(1,244),rep(0,299-244))
+ACA <- c(ACA.neg,ACA.pos)
+
+Theophylline.neg <- c(rep(1,124),rep(0,292-124))
+Theophylline.pos <- c(rep(1,114),rep(0,299-114))
+Theophylline <- c(Theophylline.neg,Theophylline.pos)
+
+Diuretics.neg <- c(rep(1,41),rep(0,292-41))
+Diuretics.pos <- c(rep(1,45),rep(0,299-45))
+Diuretics <- c(Diuretics.neg,Diuretics.pos)
+ID <- c(1:591)
+Data <- data.frame(ID=ID,LABA=LABA,
+                   Age=Age,
+                   Sex=Sex,
+                   Race=Race,
+                   'Annual income'=Annual.income,
+                   'FEv1(%predicted)'=FEV1.pre,
+                   'FEV1(mL)'=FEV1,
+                   'FEV1/FVC(%)'=FEV1.FVC,
+                   'FVC(%predicted)'=FVC.pre,
+                   'FVC(mL)'=FVC,
+                   'Forced redisual capacit(mL)'=FRC,
+                   'Hb adjusted DLCO'=DLCO,
+                   'Peak pulmonary arterial pressure(mmHg)'=PPAP,
+                   'Hemoglobin(g/dL)'=Hb,
+                   'PaO2(mmHg)'=PaO2,
+                   'PaCO2(mmHg)'=PaCO2,
+                   'Area of emphysema(%)'=Aoe,
+                   'Body mass index(kg/m^2)'=BMI,
+                   'Six-munite walk distance'=SWD,
+                   'St.George respiratory questionaire'=Que,
+                   'Shortness of breath questionaire'=SQue,
+                   'Beck depression inventory'=BDI,
+                   'Recent emergency visity'=REV,
+                   'Recent hospital stay'=RHS,
+                   'LTOT during sleep'=LTOTS,
+                   'LTOT on exertion'=LTOTE,
+                   'Oral corticoid'=Corticoid,
+                   'Inhaled corticosteroid'=InCor,
+                   'Short-acting beta-agonist'=SABA,
+                   'Anticholinergic agent'=ACA,
+                   Theophylline=Theophylline,
+                   Diuretics=Diuretics)
+
+# character
+PValue.pre <- c(NA,t.test(Age~LABA,Data)$p.value,
+t.test(Sex~LABA,Data)$p.value,
+t.test(Race~LABA,Data)$p.value,
+t.test(Annual.income~LABA,Data)$p.value,
+t.test(FEV1.pre~LABA,Data)$p.value,
+t.test(FEV1~LABA,Data)$p.value,
+t.test(FEV1.FVC~LABA,Data)$p.value,
+t.test(FVC.pre~LABA,Data)$p.value,
+t.test(FVC~LABA,Data)$p.value,
+t.test(FRC~LABA,Data)$p.value,
+t.test(DLCO~LABA,Data)$p.value,
+t.test(PPAP~LABA,Data)$p.value,
+t.test(Hb~LABA,Data)$p.value,
+t.test(PaO2~LABA,Data)$p.value,
+t.test(PaCO2~LABA,Data)$p.value,
+t.test(Aoe~LABA,Data)$p.value,
+t.test(BMI~LABA,Data)$p.value,
+t.test(SWD~LABA,Data)$p.value,
+t.test(Que~LABA,Data)$p.value,
+t.test(SQue~LABA,Data)$p.value,
+t.test(BDI~LABA,Data)$p.value,
+t.test(REV~LABA,Data)$p.value,
+t.test(RHS~LABA,Data)$p.value,
+t.test(LTOTS~LABA,Data)$p.value,
+t.test(LTOTE~LABA,Data)$p.value,
+t.test(Corticoid~LABA,Data)$p.value,
+t.test(InCor~LABA,Data)$p.value,
+t.test(SABA~LABA,Data)$p.value,
+t.test(ACA~LABA,Data)$p.value,
+t.test(Theophylline~LABA,Data)$p.value,
+t.test(Diuretics~LABA,Data)$p.value)
+
+chr <- function(x){
+                mean <- mean(x)
+                sd <- sd(x)
+                return(c(paste0(round(mean,1),'±',round(sd,1))))
+}
+fre <- function(x){
+  sum <- sum(x==1)
+  length <- length(x)
+  return(c(paste0(sum,'(',round(sum/length*100,2),'%)')))
+}
+
+Neg.pre <- c(292,chr(Age.neg),fre(sex.neg),fre(Race.neg),fre(Annual.neg),chr(FEV1.pre.neg),
+         chr(FEV1.neg),chr(FEV1.FVC.neg),chr(FVC.pre.neg),chr(FVC.neg),chr(FRC.neg),
+         chr(DLCO.neg),chr(PPAP.neg),chr(Hb.neg),chr(PaO2.neg),chr(PaCO2.neg),chr(Aoe.neg),
+         chr(BMI.neg),chr(SWD.neg),chr(Que.neg),chr(SQue.neg),chr(BDI.neg),fre(REV.neg),
+         fre(RHS.neg),fre(LTOTS.neg),fre(LTOTE.neg),fre(Corticoid.neg),fre(InCor.neg),
+         fre(SABA.neg),fre(ACA.neg),fre(Theophylline.neg),fre(Diuretics.neg))
+Pos.pre <- c(299,chr(Age.pos),fre(Sex.pos),fre(Race.pos),fre(Annual.pos),chr(FEV1.pre.pos),
+         chr(FEV1.pos),chr(FEV1.FVC.pos),chr(FVC.pre.pos),chr(FVC.pos),chr(FRC.pos),
+         chr(DLCO.pos),chr(PPAP.pos),chr(Hb.pos),chr(PaO2.pos),chr(PaCO2.pos),chr(Aoe.pos),
+         chr(BMI.pos),chr(SWD.pos),chr(Que.pos),chr(SQue.pos),chr(BDI.pos),fre(REV.pos),
+         fre(RHS.pos),fre(LTOTS.pos),fre(LTOTE.pos),fre(Corticoid.pos),fre(InCor.pos),
+         fre(SABA.pos),fre(ACA.pos),fre(Theophylline.pos),fre(Diuretics.pos))
+Name <- c('N',colnames(Data)[2:32])
+Chrac.pre <- data.frame(Var=Name,'Control'=Neg.pre,'Treat'=Pos.pre,'P.pre'=round(PValue.pre,3))
+length(Chrac.pre$P[Chrac.pre$P < 0.05])
+
+# PSM
+Data.psm <- matchit(LABA~Age+Sex+Race+Annual.income+FEV1.pre+FEV1+FEV1.FVC+FVC.pre+FVC
+                    +FRC+DLCO+PPAP+Hb+PaO2+PaCO2+Aoe+BMI+SWD+Que+SQue+BDI+REV+RHS+LTOTS
+                    +LTOTE+Corticoid+InCor+SABA+ACA+Theophylline+Diuretics,
+        data = Data, method = 'nearest',distance = 'logit',discard = 'none',caliper = 0.2)
+summary(Data.psm)
+summary(Data.psm$model)
+PSM.data <- match.data(Data.psm)
+write.xlsx(PSM.data,file = 'PSMData.xlsx',row.names = F)
+
+# Check
+Pos <- PSM.data[(PSM.data$LABA==1),]
+Neg <- PSM.data[(PSM.data$LABA==0),]
+Neg.post <- c(177,chr(Neg$Age),fre(Neg$Sex),fre(Neg$Race),fre(Neg$Annual),
+         chr(Neg$FEv1..predicted.),chr(Neg$FEV1.mL.),chr(Neg$FEV1.FVC),
+         chr(Neg$FVC..predicted.),chr(Neg$FVC.mL.),chr(Neg$Forced.redisual.capacit.mL.),
+         chr(Neg$Hb.adjusted.DLCO),chr(Neg$Peak.pulmonary.arterial.pressure.mmHg.),
+         chr(Neg$Hemoglobin.g.dL.),chr(Neg$PaO2.mmHg.),chr(Neg$PaCO2.mmHg.),
+         chr(Neg$Area.of.emphysema...),chr(Neg$Body.mass.index.kg.m.2.),
+         chr(Neg$Six.munite.walk.distance),chr(Neg$St.George.respiratory.questionaire),
+         chr(Neg$Shortness.of.breath.questionaire),chr(Neg$Beck.depression.inventory),
+         fre(Neg$Recent.emergency.visity),fre(Neg$Recent.hospital.stay),
+         fre(Neg$LTOT.during.sleep),fre(Neg$LTOT.on.exertion),
+         fre(Neg$Oral.corticoid),fre(Neg$Inhaled.corticosteroid),
+         fre(Neg$Short.acting.beta.agonist),fre(Neg$Anticholinergic.agent),
+         fre(Neg$Theophylline),fre(Neg$Diuretics))
+Pos.post <- c(177,chr(Pos$Age),fre(Pos$Sex),fre(Pos$Race),fre(Pos$Annual.income),
+              chr(Pos$FEv1..predicted.),chr(Pos$FEV1.mL.),chr(Pos$FEV1.FVC...),
+              chr(Pos$FVC..predicted.),chr(Pos$FVC.mL.),chr(Pos$Forced.redisual.capacit.mL.),
+              chr(Pos$Hb.adjusted.DLCO),chr(Pos$Peak.pulmonary.arterial.pressure.mmHg.),
+              chr(Pos$Hemoglobin.g.dL.),chr(Pos$PaO2.mmHg.),chr(Pos$PaCO2.mmHg.),
+              chr(Pos$Area.of.emphysema...),chr(Pos$Body.mass.index.kg.m.2.),
+              chr(Pos$Six.munite.walk.distance),chr(Pos$St.George.respiratory.questionaire),
+              chr(Pos$Shortness.of.breath.questionaire),chr(Pos$Beck.depression.inventory),
+              fre(Pos$Recent.emergency.visity),fre(Pos$Recent.hospital.stay),
+              fre(Pos$LTOT.during.sleep),fre(Pos$LTOT.on.exertion),
+              fre(Pos$Oral.corticoid),fre(Pos$Inhaled.corticosteroid),
+              fre(Pos$Short.acting.beta.agonist),fre(Pos$Anticholinergic.agent),
+              fre(Pos$Theophylline),fre(Pos$Diuretics))
+PValue.post <- c(NA,t.test(Age~LABA,PSM.data)$p.value,
+t.test(Sex~LABA,PSM.data)$p.value,
+t.test(Race~LABA,PSM.data)$p.value,
+t.test(Annual.income~LABA,PSM.data)$p.value,
+t.test(FEv1..predicted.~LABA,PSM.data)$p.value,
+t.test(FEV1.mL.~LABA,PSM.data)$p.value,
+t.test(FEV1.FVC...~LABA,PSM.data)$p.value,
+t.test(FVC..predicted.~LABA,PSM.data)$p.value,
+t.test(FVC.mL.~LABA,PSM.data)$p.value,
+t.test(Forced.redisual.capacit.mL.~LABA,PSM.data)$p.value,
+t.test(Hb.adjusted.DLCO~LABA,PSM.data)$p.value,
+t.test(Peak.pulmonary.arterial.pressure.mmHg.~LABA,PSM.data)$p.value,
+t.test(Hemoglobin.g.dL.~LABA,PSM.data)$p.value,
+t.test(PaO2.mmHg.~LABA,PSM.data)$p.value,
+t.test(PaCO2.mmHg.~LABA,PSM.data)$p.value,
+t.test(Area.of.emphysema...~LABA,PSM.data)$p.value,
+t.test(Body.mass.index.kg.m.2.~LABA,PSM.data)$p.value,
+t.test(Six.munite.walk.distance~LABA,PSM.data)$p.value,
+t.test(St.George.respiratory.questionaire~LABA,PSM.data)$p.value,
+t.test(Shortness.of.breath.questionaire~LABA,PSM.data)$p.value,
+t.test(Beck.depression.inventory~LABA,PSM.data)$p.value,
+t.test(Recent.emergency.visity~LABA,PSM.data)$p.value,
+t.test(Recent.hospital.stay~LABA,PSM.data)$p.value,
+t.test(LTOT.during.sleep~LABA,PSM.data)$p.value,
+t.test(LTOT.on.exertion~LABA,PSM.data)$p.value,
+t.test(Oral.corticoid~LABA,PSM.data)$p.value,
+t.test(Inhaled.corticosteroid~LABA,PSM.data)$p.value,
+t.test(Short.acting.beta.agonist~LABA,PSM.data)$p.value,
+t.test(Anticholinergic.agent~LABA,PSM.data)$p.value,
+t.test(Theophylline~LABA,PSM.data)$p.value,
+t.test(Diuretics~LABA,PSM.data)$p.value)
+Chrac.post <- data.frame(Var=Name,'Control'=Neg.post,'Treat'=Pos.post,'P.psm' = round(PValue.post,3))
+length(Chrac.post$P[Chrac.post$P.Value < 0.05])
+Compare.PSM <- data.frame(Chrac.pre,Chrac.post[2:4])
+
+# Score
+Matched <- Data.psm$match.matrix
+num1 <- as.numeric(row.names(Matched))
+num2 <- as.numeric(Matched)
+C <- na.exclude(data.frame(num1,num2))
+
+score1 <- as.numeric(PSM.data$distance[PSM.data$ID == C$num1])
+score2 <- as.numeric(PSM.data$distance[PSM.data$ID == C$num2])
+D <- abs(score1 -score2)
+Distance <- data.frame(num1=C$num1,Score1=score1,num2=C$num2,Score2=score2,D = D)
+length(D[D<0.2])
