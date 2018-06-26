@@ -1,8 +1,5 @@
 rm(list=ls())
-install.packages('MatchIt')
 library(MatchIt)
-library(rJava)
-library(xlsxjars)
 library(xlsx)
 setwd('D:\\PSM')d
 
